@@ -33,10 +33,44 @@ $app->post('/usuarios/adiciona', function(Request $request, Response $response){
     $nome = $post['nome'];
     $email = $post['email'];
 
-    return $response->getBody()->write($nome . ' - ' . $email);
+    /*
+    Salvar no banco de dados com INSERT INTO
+    .....
+    */
+
+    return $response->getBody()->write("Sucesso");
+});
+
+$app->put('/usuarios/atualiza', function(Request $request, Response $response){
+
+    //Recupera post ($_POST)
+    $post = $request->getParsedBody();
+    $id = $post['id'];
+    $nome = $post['nome'];
+    $email = $post['email'];
+
+    /*
+    Salvar no banco de dados com UPDATE
+    .....
+    */
+
+    return $response->getBody()->write("sucesso ao atualizar");
+});
+
+$app->delete('/usuarios/remove/{id}', function(Request $request, Response $response){
+
+    $id = $request->getAttribute('id');
+
+    /*
+    Deletar do banco de dados com DELETE
+    .....
+    */
+
+    return $response->getBody()->write("sucesso ao deletar: " . $id);
 });
 
 $app->run();
+
 
 /*
 $app->get('/postagens2', function(){
