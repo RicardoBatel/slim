@@ -1,9 +1,44 @@
 <?php
 
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
 require 'vendor/autoload.php';
 
 $app = new \Slim\App;
 
+/* Padrão PSR7 */
+$app->get('/postagens', function(Request $request, Response $response){
+
+    /* Escrever no corpo da resposta utilizando o padrão PSR7 */
+    $response->getBody()->write("Lista de postagens");
+    
+    return $response;
+
+});
+
+/*
+Tipos de requisição ou Verbos HTTP
+
+get -> Recuperar recursos do servidor (Select)
+post -> Criar dado no servidor (Insert)
+put -> Atualizar dados no servidor (Update)
+delete -> Deletar dados do servidor (Delete)
+*/
+
+$app->post('/usuarios/adiciona', function(Request $request, Response $response){
+
+    //Recupera post ($_POST)
+    $post = $request->getParsedBody();
+    $nome = $post['nome'];
+    $email = $post['email'];
+
+    return $response->getBody()->write($nome . ' - ' . $email);
+});
+
+$app->run();
+
+/*
 $app->get('/postagens2', function(){
 
     echo "Lista de postagens";
@@ -34,9 +69,9 @@ $app->get('/lista/{itens:.*}', function($request, $response){
 
     var_dump(explode("/", $itens));
 
-});
+});*/
 
-/* Nomear rotas */
+/* Nomear rotas 
 $app->get('/blog/postagens/{id}', function($request, $response){
    echo "Listar postagens para um Id";
 })->setName("blog");
@@ -47,9 +82,9 @@ $app->get('/meusite}', function($request, $response){
 
     echo $retorno;
    
-});
+});*/
 
-/* Agrupar rotas */
+/* Agrupar rotas 
 
 $app->group('/v1', function(){
 
@@ -65,4 +100,4 @@ $app->group('/v1', function(){
     
 });
 
-$app->run();
+$app->run();*/
