@@ -24,13 +24,20 @@ $app->get('/header', function(Request $request, Response $response){
 });
 
 $app->get('/json', function(Request $request, Response $response){
-
-    $response->write('Esse é um retorno header');
-        
+            
     return $response->withJson([
         "nome" => "Ricardo Batel",
         "endereco" => "Endereco tal..."
     ]);
+
+});
+
+$app->get('/xml', function(Request $request, Response $response){
+
+    $xml = file_get_contents('arquivo');
+    $response->write($xml);
+
+    return $response->withHeader('Content-Type', 'application/xml');
 
 });
 
