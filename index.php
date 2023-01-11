@@ -5,17 +5,52 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require 'vendor/autoload.php';
 
-$app = new \Slim\App;
+$app = new \Slim\App([
+    'settings' => [
+        'displayErrorDetails' => true
+    ]
+]);
 
-/* Padrão PSR7 */
+/* Container dependency injection */
+
+class Servico {
+
+}
+
+/* Container Pimple */
+$container = $app->getContainer();
+$container['servico'] = function(){
+
+    return new Servico;
+};
+
+$app->get('/servico', function(Request $request, Response $response){
+
+    $servico = $this->get('servico');
+    var_dump($servico);
+
+});
+
+/* Controllers como serviço */
+$container = $app->getContainer();
+$container['Home'] = function(){
+
+    return new MyApp\controllers\Home(new MyApp\View);
+};
+
+$app->get('/usuario', 'Home:index');
+
+$app->run();
+
+/* Padrão PSR7 
 $app->get('/postagens', function(Request $request, Response $response){
 
-    /* Escrever no corpo da resposta utilizando o padrão PSR7 */
+    /* Escrever no corpo da resposta utilizando o padrão PSR7 
     $response->getBody()->write("Lista de postagens");
     
     return $response;
 
-});
+});*/
 
 /*
 Tipos de requisição ou Verbos HTTP
@@ -24,7 +59,7 @@ get -> Recuperar recursos do servidor (Select)
 post -> Criar dado no servidor (Insert)
 put -> Atualizar dados no servidor (Update)
 delete -> Deletar dados do servidor (Delete)
-*/
+
 
 $app->post('/usuarios/adiciona', function(Request $request, Response $response){
 
@@ -36,7 +71,7 @@ $app->post('/usuarios/adiciona', function(Request $request, Response $response){
     /*
     Salvar no banco de dados com INSERT INTO
     .....
-    */
+    
 
     return $response->getBody()->write("Sucesso");
 });
@@ -52,7 +87,7 @@ $app->put('/usuarios/atualiza', function(Request $request, Response $response){
     /*
     Salvar no banco de dados com UPDATE
     .....
-    */
+    
 
     return $response->getBody()->write("sucesso ao atualizar");
 });
@@ -64,12 +99,12 @@ $app->delete('/usuarios/remove/{id}', function(Request $request, Response $respo
     /*
     Deletar do banco de dados com DELETE
     .....
-    */
+   
 
     return $response->getBody()->write("sucesso ao deletar: " . $id);
 });
 
-$app->run();
+*/
 
 
 /*
