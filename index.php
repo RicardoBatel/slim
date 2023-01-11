@@ -2,6 +2,7 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 require 'vendor/autoload.php';
 
@@ -11,9 +12,74 @@ $app = new \Slim\App([
     ]
 ]);
 
+$container = $app->getContainer();
+$container['db'] = function(){
+    
+    $capsule = new Capsule;
+
+    $capsule->addConnection([
+        'driver' => 'mysql',
+        'host' => 'localhost',
+        'database' => 'slim',
+        'username' => 'root',
+        'password' => '',
+        'charset' => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix' => '',
+    ]);
+
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    return $capsule;
+
+};
+
+$app->get('/usuarios', function(Request $request, Response $response){
+
+    $db = $this->get('db');
+    /* criar tabela */
+    /*$db->schema()->dropIfExists('usuarios');
+    $db->schema()->create('usuarios', function($table){
+
+        $table->increments('id');
+        $table->string('nome');
+        $table->string('email');
+        $table->timestamps();
+
+    });*/
+
+    /* inserir dados */
+    /*$db->table('usuarios')->insert([
+        'nome' => 'Ricardo Batel',
+        'email' => 'ricardo@teste.com.br'
+    ]);*/
+
+    /* Atualizar */
+    /*$db->table('usuarios')
+                ->where('id', 1)
+                ->update([
+                    'nome' => 'Ricardo'
+                ]);*/
+
+    /* Deletar */
+    /*$db->table('usuarios')
+                ->where('id', 1)
+                ->delete();*/
+
+    $tabela_usuarios = $db->table('usuarios');
+    $usuarios = $tabela_usuarios->get();
+    foreach ($usuarios as $usuario) {
+        echo $usuario->nome . '<br>';
+    }
+
+});
+
+$app->run();
+
 /* Tipos de respostas
 cabeçalho, texto, Json, XML
-*/
+
 
 $app->get('/header', function(Request $request, Response $response){
 
@@ -39,9 +105,11 @@ $app->get('/xml', function(Request $request, Response $response){
 
     return $response->withHeader('Content-Type', 'application/xml');
 
-});
+});*/
 
-/* Middleware */
+
+
+/* Middleware 
 
 $app->add(function($request, $response, $next){
 
@@ -71,7 +139,7 @@ $app->add(function($request, $response, $next){
     $response->write('Inicio camada 2 + ');
     return $next($request, $response);
 
-});*/
+});
 
 $app->get('/usuarios', function(Request $request, Response $response){
     
@@ -85,7 +153,7 @@ $app->get('/postagens', function(Request $request, Response $response){
     
 });
 
-$app->run();
+$
 
 /* Container dependency injection 
 
