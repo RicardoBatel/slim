@@ -11,13 +11,29 @@ $app = new \Slim\App([
     ]
 ]);
 
-/* Container dependency injection */
+/* Tipos de respostas
+cabeçalho, texto, Json, XML
+*/
+
+$app->get('/header', function(Request $request, Response $response){
+
+    $response->write('Esse é um retorno header');
+    return $response->withHeader('allow', 'PUT')
+                    ->withAddedHeader('Content-Length', 30);
+
+});
+
+
+
+$app->run();
+
+/* Container dependency injection 
 
 class Servico {
 
 }
 
-/* Container Pimple */
+/* Container Pimple 
 $container = $app->getContainer();
 $container['servico'] = function(){
 
@@ -31,7 +47,7 @@ $app->get('/servico', function(Request $request, Response $response){
 
 });
 
-/* Controllers como serviço */
+/* Controllers como serviço 
 $container = $app->getContainer();
 $container['Home'] = function(){
 
@@ -40,7 +56,7 @@ $container['Home'] = function(){
 
 $app->get('/usuario', 'Home:index');
 
-$app->run();
+
 
 /* Padrão PSR7 
 $app->get('/postagens', function(Request $request, Response $response){
