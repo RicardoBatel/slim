@@ -23,6 +23,16 @@ $app->get('/header', function(Request $request, Response $response){
 
 });
 
+$app->get('/json', function(Request $request, Response $response){
+
+    $response->write('Esse é um retorno header');
+        
+    return $response->withJson([
+        "nome" => "Ricardo Batel",
+        "endereco" => "Endereco tal..."
+    ]);
+
+});
 
 
 $app->run();
