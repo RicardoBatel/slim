@@ -41,6 +41,49 @@ $app->get('/xml', function(Request $request, Response $response){
 
 });
 
+/* Middleware */
+
+$app->add(function($request, $response, $next){
+
+    $response->write('Inicio camada 1 + ');
+    //return $next($request, $response);
+    $response = $next($request, $response);
+
+    $response->write(' + Fim camada 1 ');
+    return $response;
+
+});
+
+$app->add(function($request, $response, $next){
+
+    $response->write('Inicio camada 2 + ');
+    //return $next($request, $response);
+    $response = $next($request, $response);
+
+    $response->write(' + Fim camada 2 ');
+    return $response;
+
+});
+
+/*
+$app->add(function($request, $response, $next){
+
+    $response->write('Inicio camada 2 + ');
+    return $next($request, $response);
+
+});*/
+
+$app->get('/usuarios', function(Request $request, Response $response){
+    
+    $response->write(' Ação principal usuarios ');
+    
+});
+
+$app->get('/postagens', function(Request $request, Response $response){
+    
+    $response->write(' Ação principal postagens ');
+    
+});
 
 $app->run();
 
